@@ -1,29 +1,31 @@
 <template>
-  <div>
+  <div class="container">
     <h2>Registration Form</h2>
     <form @submit.prevent="submitForm">
-      <div>
+      <div class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" v-model="name" required>
+        <input class="form-control" type="text" id="name" v-model="name" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required>
+        <input class="form-control" type="email" id="email" v-model="email" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required>
+        <input class="form-control" type="password" id="password" v-model="password" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" v-model="confirmPassword" required>
+        <input class="form-control" type="password" id="confirmPassword" v-model="confirmPassword" required>
       </div>
-      <button type="submit">Register</button>
+      <button class="btn btn-success" type="submit">Register</button>
     </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -40,29 +42,26 @@ export default {
         alert('Passwords do not match.');
         return;
       }
-      
+
       // Prepare the form data
       const formData = {
         name: this.name,
         email: this.email,
         password: this.password
       };
-      
+
       // Make an HTTP POST request to the Laravel API
-      fetch('http://your-api-url/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-        .then(response => response.json())
-        .then(data => {
+      axios
+        .post('http://127.0.0.1:8000/api/register', formData)
+        .then(response => {
           // Handle the API response here
-          if (data.success) {
+          if (response.data.success) {
+            console.log(response);
+            console.log("test");
             alert('Registration successful!');
             this.resetForm();
           } else {
+            console.log(response);
             alert('Registration failed. Please try again.');
           }
         })
@@ -71,7 +70,7 @@ export default {
           alert('An error occurred. Please try again later.');
         });
     },
-    
+
     resetForm() {
       this.name = '';
       this.email = '';
