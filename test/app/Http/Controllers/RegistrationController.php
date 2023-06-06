@@ -15,6 +15,11 @@ class RegistrationController extends Controller
     public function index(Request $request)
     {
 
+        $validator = $request->validate([
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+
         $User = new User();
         $User->name = $request->name;
         $User->email = $request->email;
