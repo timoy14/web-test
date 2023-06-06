@@ -17,7 +17,6 @@ class LoginController extends Controller
      */
     public function index(Request $request)
     {
-        // return "Test";
         $validator = $request->validate([
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6',
@@ -32,6 +31,7 @@ class LoginController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ];
+
         if (Auth::attempt($data)) {
             $user = User::find(Auth::user()->id);
             $user->last_login = Carbon::now();
