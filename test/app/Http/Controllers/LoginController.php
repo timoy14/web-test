@@ -32,16 +32,12 @@ class LoginController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ];
-        
-
-        // $user::where("email",$request->email)
-
-        $user = User::find(1);
-        $token = $user->createToken('name');
-
-        if (isset($user->id)) {
+        if (Auth::attempt($data)) {
+            $user = User::find(Auth::user()->id);
             $user->last_login = Carbon::now();
             $user->save();
+
+            $token = Auth::user()->createToken('name');
             return response()->json(['token' => $token,'user'=>$user], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
